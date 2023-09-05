@@ -32,7 +32,66 @@ object AdvancedRecap extends App{
 //
   pfChain(5) // 999 per partialfunction
   pfChain(60) // 9000
-  pfChain(232) // throw a MatchError
+//  pfChain(232) // throw a MatchError
+
+  // type aliases
+  type ReciveFunction = PartialFunction[Any, Unit]
+
+  def recive: ReciveFunction = {
+    case 1 => println("hello")
+    case _ => println("confused ...")
+  }
+
+  // Implicits
+
+  implicit val timeout = 3000
+  def setTimeout(f: () => Unit)(implicit timeout: Int) = f()
+
+  // implicit conversion
+  // 1) implicit defs
+  case class Person(name: String){
+    def great = s"Hi, mi name is $name"
+  }
+
+  implicit def fromStringToPerson(string:String): Person = Person(string)
+
+  "Peter".great
+  // fromStringToPerson("Peter").greet - automatically done by the compiler
+
+  // 2) implicit classes
+
+  implicit class Dog(name: String) {
+    def bark = println("bark!")
+  }
+
+  "Lassie".bark
+  // new Dog("lassie").bark - automatically done by the compiler
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
