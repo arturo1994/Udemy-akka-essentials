@@ -1,5 +1,7 @@
 package part1recap
 
+import scala.concurrent.Future
+
 object AdvancedRecap extends App{
 
   // partial functions
@@ -65,12 +67,31 @@ object AdvancedRecap extends App{
   }
 
   "Lassie".bark
+
   // new Dog("lassie").bark - automatically done by the compiler
 
+  // organize
+  // Local scope
 
+  implicit val inverseOrdering: Ordering[Int] = Ordering.fromLessThan(_ > _)
+  List(1,2,3).sorted // List(3, 2, 1)
 
+  // imported Scope
 
+  import scala.concurrent.ExecutionContext.Implicits.global
+  val future = Future{
+    println("hello, future")
+  }
 
+  // companion objects of the types included in the call
+
+  object Person{
+    implicit val personOrdering: Ordering[Person] = Ordering.fromLessThan((a,b) => a.name.compareTo(b.name) < 0)
+  }
+
+  println(List(Person("Bob"), Person("Alice")).sorted)
+
+  // List(Person(Alice), Person(Bob))
 
 
 
