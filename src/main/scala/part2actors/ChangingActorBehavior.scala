@@ -35,14 +35,14 @@ object ChangingActorBehavior extends App{
     override def receive: Receive = happyReceive
 
     def happyReceive: Receive = {
-      case Food(VEGETABLE) => context.become(sadReceive)
+      case Food(VEGETABLE) => context.become(sadReceive, false)
       case Food(CHOCOLATE) =>
       case MomAsk(_) => sender() ! KidAccept
     }
 
     def sadReceive: Receive = {
-      case Food(VEGETABLE) =>
-      case Food(CHOCOLATE) => context.become(happyReceive)
+      case Food(VEGETABLE) => context.become(sadReceive, false)
+      case Food(CHOCOLATE) => context.unbecome
       case MomAsk(_) => sender() ! KidReject
     }
   }
@@ -60,6 +60,9 @@ object ChangingActorBehavior extends App{
     override def receive: Receive = {
       case MomStart(kidRef) =>{
         kidRef ! Food(VEGETABLE)
+        kidRef ! Food(VEGETABLE)
+        kidRef ! Food(CHOCOLATE)
+        kidRef ! Food(CHOCOLATE)
         kidRef ! MomAsk("Do you want to play?")
       }
       case KidAccept => println("Yes, my kid is happy")
